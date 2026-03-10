@@ -19,7 +19,7 @@ public class BasicStreamsQuiz {
      * Return all course names sorted alphabetically.
      */
     public List<String> getSortedCourseNames() {
-        throw new UnsupportedOperationException();
+        return scoresByCourse.keySet().stream().sorted().toList();
     }
 
     /**
@@ -27,7 +27,8 @@ public class BasicStreamsQuiz {
      * Across all courses, count how many scores are greater than or equal to threshold.
      */
     public long countScoresAtLeast(int threshold) {
-        throw new UnsupportedOperationException();
+        return scoresByCourse.values().stream().filter(grades -> grades.stream().anyMatch(i -> i >= threshold)).count();
+
     }
 
     /**
@@ -36,7 +37,7 @@ public class BasicStreamsQuiz {
      * If none exists, return Optional.empty().
      */
     public Optional<String> firstLongWord(List<String> words, int minLength) {
-        throw new UnsupportedOperationException();
+        return words.stream().min(Comparator.comparingInt(String::length));
     }
 
     /**
@@ -45,7 +46,9 @@ public class BasicStreamsQuiz {
      * Use streams.
      */
     public List<Integer> squareAll(List<Integer> numbers) {
-        throw new UnsupportedOperationException();
+        List<Integer> squares = new ArrayList<>();
+        numbers.stream().forEach(i -> squares.add(i * i));
+        return squares;
     }
 
     /**
@@ -56,6 +59,12 @@ public class BasicStreamsQuiz {
      * Return 0.0 if there are no passing scores.
      */
     public double averagePassingScore() {
-        throw new UnsupportedOperationException();
+        scoresByCourse.values().stream().filter(grades ->grades.forEach(i -> grades.get(i) >= 70).count);
     }
+
+    public static void main(String[] args) {
+        BasicStreamsQuiz q = new BasicStreamsQuiz();
+        System.out.println(q.getSortedCourseNames());
+    }
+
 }
