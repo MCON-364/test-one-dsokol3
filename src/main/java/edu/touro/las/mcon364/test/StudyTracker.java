@@ -25,7 +25,8 @@ public class StudyTracker {
      * Throw IllegalArgumentException if name is null or blank.
      */
     public boolean addLearner(String name) {
-        throw new UnsupportedOperationException();
+        Optional.ofNullable(name).orElseThrow(IllegalArgumentException::new);
+        return scoresByLearner.putIfAbsent(name, new ArrayList<>()) == null;
     }
 
     /**
@@ -42,7 +43,10 @@ public class StudyTracker {
      * This operation should be undoable.
      */
     public boolean addScore(String name, int score) {
-        throw new UnsupportedOperationException();
+        Optional.ofNullable(name).orElseThrow(IllegalArgumentException::new);
+        Optional.of(score<100 && score > 0).orElseThrow(IllegalArgumentException::new);
+
+        return  (scoresByLearner.putIfAbsent(name, new ArrayList<>()).add(score));
     }
 
     /**
@@ -70,7 +74,29 @@ public class StudyTracker {
      * Return Optional.empty() when no average exists.
      */
     public Optional<String> letterBandFor(String name) {
-        throw new UnsupportedOperationException();
+        Optional<List<Integer>> grades = scoresFor(name);
+        if (grades.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<Double> avg = averageFor(name);
+        int avgInt = avg.get().intValue();
+        return switch (avgInt >= 90 ? 'A' : avgInt >= 80 ? 'B' : avgInt >= 70 ? 'C' : avgInt >= 60 ? 'D' : 'F') {
+            case 'A' -> {
+                yield Optional.of("A");
+            }
+            case 'B' -> {
+                yield Optional.of("B");
+            }
+            case 'C' -> {
+                yield Optional.of("C");
+            }
+            case 'D' -> {
+                yield Optional.of("D");
+            }
+            default -> {
+                yield Optional.of("F");
+            }
+        };
     }
 
     /**
@@ -81,7 +107,7 @@ public class StudyTracker {
      * Return false if there is nothing to undo.
      */
     public boolean undoLastChange() {
-        throw new UnsupportedOperationException();
+        //UndoStep
     }
 
 
