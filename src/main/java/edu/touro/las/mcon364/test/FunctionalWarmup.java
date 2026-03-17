@@ -1,6 +1,8 @@
 package edu.touro.las.mcon364.test;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -13,7 +15,7 @@ public class FunctionalWarmup {
      * Return a Supplier that gives the current month number (1-12).
      */
     public static Supplier<Integer> currentMonthSupplier() {
-        throw new UnsupportedOperationException();
+        return () -> LocalDate.now().getMonthValue();
     }
 
     /**
@@ -22,7 +24,8 @@ public class FunctionalWarmup {
      * has more than 5 characters.
      */
     public static Predicate<String> longerThanFive() {
-        throw new UnsupportedOperationException();
+        Predicate<String> longerThanFive = s -> s.length() > 5;
+        return longerThanFive;
     }
 
     /**
@@ -34,7 +37,9 @@ public class FunctionalWarmup {
      * Prefer chaining smaller predicates.
      */
     public static Predicate<Integer> positiveAndEven() {
-        throw new UnsupportedOperationException();
+
+        Predicate<Integer> positiveAndEven = x -> x > 0 && x % 2 == 0;
+        return positiveAndEven;
     }
 
     /**
@@ -48,7 +53,8 @@ public class FunctionalWarmup {
      *
      */
     public static Function<String, Integer> wordCounter() {
-        throw new UnsupportedOperationException();
+        Function<String, Integer> numWords = s -> s.trim().replaceAll(" ", "").length();
+        return numWords;
     }
 
     /**
@@ -63,6 +69,23 @@ public class FunctionalWarmup {
      * ["  math ", "", " java", "  "] -> ["MATH", "JAVA"]
      */
     public static List<String> cleanLabels(List<String> labels) {
-        throw new UnsupportedOperationException();
+        Function<String, String> trim = String::trim;
+        Function<String, String> removeWhiteSpace = s -> s.replaceAll(" ", "");
+        Function<String, String> clean = trim.andThen(String::toUpperCase).andThen(removeWhiteSpace);
+        List<String> cleanedLabels = new ArrayList<>();
+        for (String label : labels) {
+            label = clean.apply(label);
+            cleanedLabels.add(clean.apply(label));
+        }
+        return cleanedLabels;
+    }
+    public static void main(String[] args) {
+        ArrayList<String> list = new ArrayList<>();
+        list.add("  math ");
+        list.add("");
+        list.add(" java");
+        list.add("  ");
+        System.out.println(list);
+        System.out.println(cleanLabels(list));
     }
 }
